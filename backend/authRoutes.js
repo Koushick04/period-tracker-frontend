@@ -124,7 +124,7 @@ router.put("/settings", auth, async (req, res) => {
 });
 
 const nodemailer = require("nodemailer");
-require("dotenv").config();
+// dotenv config moved to server.js
 
 // FORGOT PASSWORD
 router.post("/forgot-password", async (req, res) => {

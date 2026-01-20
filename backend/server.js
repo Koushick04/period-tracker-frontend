@@ -1,4 +1,6 @@
+require("dotenv").config();
 const express = require("express");
+
 const cors = require("cors");
 
 const authRoutes = require("./authRoutes");
@@ -8,7 +10,12 @@ const app = express();
 
 // Use env var for Frontend URL if needed, or * for public access
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "*"
+  origin: [
+    "http://localhost:5173",
+    "https://period-tracker-lake-five.vercel.app"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 
 app.use(express.json());
