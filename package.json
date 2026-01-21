@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "cd frontend && npm install && npm run build && cd .. && mkdir dist && xcopy /E /I frontend\\dist dist",
+    "build": "cd frontend && npm install && npm run build && cd .. && mkdir -p dist && cp -r frontend/dist/* dist/",
     "install": "cd frontend && npm install"
   },
   "devDependencies": {
