@@ -92,7 +92,7 @@ export default function Auth({ setToken }) {
 
   return (
     <div className="auth-bg" style={container}>
-      <form onSubmit={handleSubmit} style={card} className="fade-in">
+      <form onSubmit={handleSubmit} style={card} className="fade-in" autoComplete="off">
         <h2 style={title}>{renderTitle()}</h2>
         <p style={{ textAlign: 'center', marginBottom: '20px', color: '#666' }}>
           {renderSubtitle()}
@@ -109,6 +109,7 @@ export default function Auth({ setToken }) {
           required={mode !== "reset"} // In reset mode, it's pre-filled/readonly usually, but let's keep it editable just in case
           readOnly={mode === "reset"} // Lock email during reset to ensure match
           onChange={(e) => setEmail(e.target.value)}
+          autoComplete="off" // Prevent autofill
           style={input}
         />
 
@@ -146,6 +147,7 @@ export default function Auth({ setToken }) {
               value={password}
               required
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password" // Trick to prevent aggressive autofill
               style={passwordInput}
             />
             <button
