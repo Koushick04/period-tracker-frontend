@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build && cd .. && mkdir dist && xcopy /E /I frontend\\dist dist",
+    "install": "cd frontend && npm install"
+  },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.2",
     "vite": "^7.3.1"
