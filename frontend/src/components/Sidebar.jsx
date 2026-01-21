@@ -10,7 +10,9 @@ export default function Sidebar({
   setToken,
   openCalendar,
   notificationCount,
-  userName
+  userName,
+  isOpen,
+  closeSidebar
 }) {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   // Removed internal userName state/fetch to rely on parent prop for instant updates
@@ -25,7 +27,14 @@ export default function Sidebar({
 
   return (
     <>
-      <div className="sidebar">
+      <div
+        className={`sidebar-overlay ${isOpen ? "open" : ""}`}
+        onClick={closeSidebar}
+      />
+      <div className={`sidebar ${isOpen ? "open" : ""}`}>
+        {/* Mobile Close Button */}
+        <button className="close-sidebar-btn" onClick={closeSidebar}>×</button>
+
         <div className="sidebar-header">
           <h2 style={{ margin: 0 }}>Period Tracker</h2>
           <p style={{ margin: '5px 0 0', fontSize: '14px', color: '#db2777', fontWeight: '500' }}>Hi, {userName}</p>

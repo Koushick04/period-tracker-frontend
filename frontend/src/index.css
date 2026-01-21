@@ -383,3 +383,102 @@ button:focus-visible {
   padding: 32px;
   background-color: #f8f9fa;
 }
+
+/* ---------------- MOBILE RESPONSIVENESS ---------------- */
+
+/* Elements hidden on desktop */
+.mobile-menu-btn {
+  display: none;
+}
+
+.close-sidebar-btn {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+/* Open state for overlay */
+.sidebar-overlay.open {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Mobile Breakpoint */
+@media (max-width: 768px) {
+
+  /* Layout Adjustment */
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .main {
+    padding-top: 70px;
+    /* Space for the menu button */
+  }
+
+  /* Hamburger Button */
+  .mobile-menu-btn {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 900;
+    background: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: #db2777;
+    cursor: pointer;
+  }
+
+  /* Sidebar - Drawer Style */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 250px;
+    transform: translateX(-100%);
+    /* Hidden by default */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    /* Slide in */
+  }
+
+  /* Close Button in Sidebar */
+  .close-sidebar-btn {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

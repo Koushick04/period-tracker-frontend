@@ -11,9 +11,11 @@ import API_URL from "../config";
 
 export default function Layout({ setToken }) {
   const [page, setPage] = useState("calendar");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar state
   const [notifications, setNotifications] = useState([]);
   const [calendarKey, setCalendarKey] = useState(0);
   const [userName, setUserName] = useState("User");
+  const [periods, setPeriods] = useState([]); // Lifted state
 
   // Fetch notifications & user profile
   useEffect(() => {
@@ -25,6 +27,9 @@ export default function Layout({ setToken }) {
           axios.get(`${API_URL}/api/auth/settings`, { headers: { Authorization: token } }),
           axios.get(`${API_URL}/api/auth/profile`, { headers: { Authorization: token } })
         ]);
+
+        // Store Period Data
+        setPeriods(periodsRes.data);
 
         // Notifications logic
         const dates = periodsRes.data.map(d => d.start_date).sort();
@@ -46,23 +51,47 @@ export default function Layout({ setToken }) {
 
   const openCalendar = () => {
     setCalendarKey(prev => prev + 1); // force remount
+    setCalendarKey(prev => prev + 1); // force remount
     setPage("calendar");
+    setIsSidebarOpen(false); // Close sidebar on mobile when navigating
   };
 
   return (
     <div className="app-layout">
+      <button
+        className="mobile-menu-btn"
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        ☰
+      </button>
+
       <Sidebar
         page={page}
-        setPage={setPage}
+        setPage={(p) => {
+          setPage(p);
+          setIsSidebarOpen(false); // Close on nav
+        }}
         setToken={setToken}
         openCalendar={openCalendar}
         notificationCount={notifications.length}
         userName={userName}
+        isOpen={isSidebarOpen}
+        closeSidebar={() => setIsSidebarOpen(false)}
       />
 
       <div className="main">
         {page === "calendar" && (
-          <CalendarView key={calendarKey} />
+          <CalendarView
+            key={calendarKey}
+            periods={periods}
+            refreshPeriods={() => {
+              // Re-fetch only periods to update state
+              const token = localStorage.getItem("token");
+              axios.get(`${API_URL}/api/periods`, { headers: { Authorization: token } })
+                .then(res => setPeriods(res.data))
+                .catch(err => console.error(err));
+            }}
+          />
         )}
         {page === "notifications" && (
           <Notifications />

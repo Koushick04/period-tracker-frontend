@@ -12,7 +12,7 @@ import { calculateAverageCycle, predictNextDate, buildPredictionWindow } from ".
 
 import API_URL from "../config";
 
-export default function CalendarView() {
+export default function CalendarView({ periods, refreshPeriods }) {
   const [events, setEvents] = useState([]);
   const [periodDates, setPeriodDates] = useState([]);
   const [average, setAverage] = useState(null);
@@ -24,17 +24,13 @@ export default function CalendarView() {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // Load saved data
+  // Sync with periods prop from Layout
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/periods`, {
-        headers: { Authorization: token }
-      })
-      .then(res => {
-        // Backend now returns "YYYY-MM-DD" strings directly
-        const dates = res.data.map(d => d.start_date);
-        rebuildCalendar(dates);
-      });
-  }, []);
+    if (periods) {
+      const dates = periods.map(d => d.start_date || d); // Handle object or string
+      rebuildCalendar(dates);
+    }
+  }, [periods]);
 
   // Build calendar safely
   function rebuildCalendar(dates) {
@@ -95,7 +91,9 @@ export default function CalendarView() {
       `${API_URL}/api/periods`,
       { date: selectedDate },
       { headers: { Authorization: token } }
-    );
+    ).then(() => {
+      refreshPeriods(); // Update parent state
+    });
 
     setSelectedDate(null);
   };
@@ -111,7 +109,9 @@ export default function CalendarView() {
         headers: { Authorization: token },
         data: { date: selectedDate } // Correct axios delete body syntax
       }
-    );
+    ).then(() => {
+      refreshPeriods(); // Update parent state
+    });
 
     setSelectedDate(null);
   };
@@ -131,6 +131,8 @@ export default function CalendarView() {
 
     axios.delete(`${API_URL}/api/periods/all`, {
       headers: { Authorization: token }
+    }).then(() => {
+      refreshPeriods(); // Update parent state
     });
   };
 

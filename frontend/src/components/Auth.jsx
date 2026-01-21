@@ -214,7 +214,8 @@ const card = {
   backdropFilter: "blur(20px)",
   padding: "40px",
   borderRadius: "24px",
-  width: "380px",
+  width: "90%",           // Changed from fixed 380px to relative
+  maxWidth: "400px",      // Cap width at 400px
   boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
   border: "1px solid rgba(255, 255, 255, 0.18)",
   position: "relative",
