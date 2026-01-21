@@ -1,15 +1,21 @@
-const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, ".env") });
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
 const express = require("express");
-console.log("DEBUG: Active DATABASE_URL is:", process.env.DATABASE_URL);
 const cors = require("cors");
+require("dotenv").config(); // ✅ Render-compatible
 
 const authRoutes = require("./authRoutes");
 const periodRoutes = require("./periodRoutes");
 
 const app = express();
 
-// Use env var for Frontend URL if needed, or * for public access
+/**
+ * CORS Configuration
+ * - Allows localhost (dev)
+ * - Allows Vercel production & preview URLs
+ */
 app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
@@ -17,14 +23,16 @@ app.use(cors({
       "https://period-tracker-lake-five.vercel.app"
     ];
 
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow server-to-server, Postman, curl, etc.
     if (!origin) return callback(null, true);
 
-    // Check for allowed origins or Vercel preview URLs
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith(".vercel.app")) {
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith(".vercel.app")
+    ) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
@@ -33,10 +41,17 @@ app.use(cors({
 
 app.use(express.json());
 
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/periods", periodRoutes);
 
+// ✅ Health check (VERY IMPORTANT)
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`Backend running on port ${PORT}`)
-);
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
+});
