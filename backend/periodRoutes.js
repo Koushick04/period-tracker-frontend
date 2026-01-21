@@ -25,7 +25,7 @@ router.get("/", auth, async (req, res) => {
   const result = await db.query(
     `
     SELECT 
-      start_date::date AS start_date
+      TO_CHAR(start_date, 'YYYY-MM-DD') AS start_date
     FROM periods
     WHERE user_id = $1
     ORDER BY start_date

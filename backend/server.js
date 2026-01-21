@@ -1,6 +1,7 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
 const express = require("express");
-
+console.log("DEBUG: Active DATABASE_URL is:", process.env.DATABASE_URL);
 const cors = require("cors");
 
 const authRoutes = require("./authRoutes");
