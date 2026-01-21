@@ -8,6 +8,7 @@ export default function Settings() {
     cycle_override: "",
     notify_days: 3
   });
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,11 +35,8 @@ export default function Settings() {
       },
       { headers: { Authorization: token } }
     ).then(() => {
-      // Show in-app status instead of alert
-      const btn = document.getElementById("save-settings-btn");
-      const originalText = btn.innerText;
-      btn.innerText = "Saved!";
-      setTimeout(() => btn.innerText = originalText, 2000);
+      setStatus("Saved!");
+      setTimeout(() => setStatus(""), 2000);
     });
   };
 
@@ -51,8 +49,8 @@ export default function Settings() {
       <input
         type="number"
         placeholder="Auto (use average)"
-        value={cycleOverride}
-        onChange={e => setCycleOverride(e.target.value)}
+        value={formData.cycle_override}
+        onChange={e => setFormData({ ...formData, cycle_override: e.target.value })}
         style={input}
       />
       <p style={hint}>
@@ -62,8 +60,8 @@ export default function Settings() {
       {/* Notification Days */}
       <label style={label}>Notify Before (days)</label>
       <select
-        value={notifyDays}
-        onChange={e => setNotifyDays(Number(e.target.value))}
+        value={formData.notify_days}
+        onChange={e => setFormData({ ...formData, notify_days: Number(e.target.value) })}
         style={input}
       >
         {[1, 2, 3, 4, 5].map(d => (
@@ -73,7 +71,7 @@ export default function Settings() {
         ))}
       </select>
 
-      <button style={btn} onClick={saveSettings}>
+      <button style={btn} onClick={handleSave}>
         Save Settings
       </button>
 

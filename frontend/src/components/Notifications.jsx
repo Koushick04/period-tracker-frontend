@@ -21,16 +21,26 @@ export default function Notifications() {
 
         if (dates.length >= 2) {
           // Simple logic: Calc average, find last date, predict next
-          const timestamps = dates.map(d => new Date(d).getTime());
+          // Manual parse to ensure Local Time (YYYY, MM-1, DD)
+          const parseLocal = (str) => {
+            const [y, m, d] = str.split('-').map(Number);
+            return new Date(y, m - 1, d);
+          };
+
+          const timestamps = dates.map(d => parseLocal(d).getTime());
+
           let diffs = 0;
           for (let i = 1; i < timestamps.length; i++) diffs += (timestamps[i] - timestamps[i - 1]);
           const avg = Math.round(diffs / (dates.length - 1) / (1000 * 3600 * 24));
 
-          const lastDate = new Date(dates[dates.length - 1]);
+          const lastDate = parseLocal(dates[dates.length - 1]);
           const nextDate = new Date(lastDate);
           nextDate.setDate(lastDate.getDate() + avg);
 
           const today = new Date();
+          // Reset today to midnight for fair comparison
+          today.setHours(0, 0, 0, 0);
+
           const timeDiff = nextDate - today;
           const daysUntil = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
@@ -40,7 +50,7 @@ export default function Notifications() {
           setReminders([
             {
               title: "Next Period Prediction",
-              message: `Expected around ${nextDate.toLocaleDateString('en-GB')} (${daysUntil} days left)`
+              message: `Expected around ${nextDate.toLocaleDateString('en-GB')}`
             },
             {
               title: "Period Reminder",

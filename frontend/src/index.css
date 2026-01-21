@@ -113,11 +113,10 @@ button:focus-visible {
   margin-bottom: 10px;
 }
 
-/* Calendar Weekends */
+/* Calendar Weekends - REMOVED SHADING as requested */
 .fc-day-sat,
 .fc-day-sun {
-  background-color: #fce7f3 !important;
-  /* Darker pinkish tone for weekends */
+  background-color: transparent !important;
 }
 
 .popup-btn.danger {
@@ -202,15 +201,19 @@ button:focus-visible {
   overflow: hidden;
 }
 
+/* DARK SIDEBAR THEME */
 .sidebar {
-  width: 260px;
-  background: #ffffff;
-  border-right: 1px solid #e5e7eb;
+  width: 280px;
+  background: #831843;
+  /* Dark Pink (Pink-900) */
+  border-right: 1px solid #831843;
   display: flex;
   flex-direction: column;
   padding: 24px;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
-  z-index: 10;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  position: relative;
+  color: white;
 }
 
 .sidebar-header {
@@ -218,13 +221,20 @@ button:focus-visible {
   padding-left: 12px;
 }
 
+.sidebar-header h2 {
+  color: white !important;
+}
+
+.sidebar-header p {
+  color: #fbcfe8 !important;
+  /* Light pink text */
+}
+
+/* Hide gradient text for dark sidebar */
 .sidebar-header h3 {
   font-size: 24px;
   font-weight: 700;
-  background: linear-gradient(135deg, #db2777 0%, #9d174d 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white;
   margin: 0;
 }
 
@@ -244,22 +254,24 @@ button:focus-visible {
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #4b5563;
+  color: #fce7f3;
+  /* Very light pink text */
   font-weight: 500;
   font-size: 15px;
   user-select: none;
 }
 
 .nav-item:hover {
-  background-color: #fce7f3;
-  color: #db2777;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   transform: translateX(4px);
 }
 
 .nav-item.active {
-  background-color: #db2777;
-  color: white;
-  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.25);
+  background-color: #ffffff;
+  color: #be185d;
+  /* Dark Pink text on White bg */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-icon {
@@ -268,25 +280,23 @@ button:focus-visible {
 }
 
 .nav-badge {
-  background: #ef4444;
-  color: white;
+  background: #ffffff;
+  color: #be185d;
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 99px;
   margin-left: auto;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Sidebar Logout Button */
 .logout-btn {
   width: 100%;
   padding: 12px;
-  background: #fce7f3;
-  /* Light pink background */
-  color: #be185d;
-  /* Dark pink text */
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fbcfe8;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -295,7 +305,8 @@ button:focus-visible {
 }
 
 .logout-btn:hover {
-  background: #fbcfe8;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
   transform: translateY(-2px);
 }
 

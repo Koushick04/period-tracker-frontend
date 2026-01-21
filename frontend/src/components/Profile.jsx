@@ -3,7 +3,7 @@ import axios from "axios";
 
 import API_URL from "../config";
 
-export default function Profile() {
+export default function Profile({ onNameUpdate }) {
   const [formData, setFormData] = useState({
     display_name: "",
     avatar: "👩"
@@ -32,6 +32,8 @@ export default function Profile() {
       { headers: { Authorization: token } }
     ).then(() => {
       setStatus("Saved!");
+      // Instant update sidebar
+      if (onNameUpdate) onNameUpdate(formData.display_name);
       setTimeout(() => setStatus(""), 2000);
     }).catch(err => {
       console.error(err);

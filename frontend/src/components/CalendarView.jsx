@@ -6,32 +6,7 @@ import axios from "axios";
 
 /* ---------------- HELPERS ---------------- */
 
-function calculateAverageCycle(dates) {
-  if (dates.length < 2) return null;
-  const sorted = dates.map(d => new Date(d)).sort((a, b) => a - b);
-  let total = 0;
-  for (let i = 1; i < sorted.length; i++) {
-    total += (sorted[i] - sorted[i - 1]) / (1000 * 60 * 60 * 24);
-  }
-  return Math.round(total / (sorted.length - 1));
-}
-
-function predictNextDate(dates, avg) {
-  if (!avg || dates.length === 0) return null;
-  const last = new Date(dates.sort().slice(-1)[0]);
-  last.setDate(last.getDate() + avg);
-  return last;
-}
-
-function buildPredictionWindow(predicted) {
-  const days = [];
-  for (let i = -3; i <= 1; i++) {
-    const d = new Date(predicted);
-    d.setDate(d.getDate() + i);
-    days.push(d.toISOString().split("T")[0]);
-  }
-  return days;
-}
+import { calculateAverageCycle, predictNextDate, buildPredictionWindow } from "../utils/cycleHelper";
 
 /* ---------------- COMPONENT ---------------- */
 
@@ -55,8 +30,8 @@ export default function CalendarView() {
         headers: { Authorization: token }
       })
       .then(res => {
-        // Normalize backend dates to YYYY-MM-DD strings
-        const dates = res.data.map(d => new Date(d.start_date).toISOString().split("T")[0]);
+        // Backend now returns "YYYY-MM-DD" strings directly
+        const dates = res.data.map(d => d.start_date);
         rebuildCalendar(dates);
       });
   }, []);
@@ -84,7 +59,7 @@ export default function CalendarView() {
           start: day,
           display: "background",
           allDay: true,
-          backgroundColor: "#fbcfe8"
+          backgroundColor: "#e9d5ff" // Light purple to differ from pink theme
         });
       });
 

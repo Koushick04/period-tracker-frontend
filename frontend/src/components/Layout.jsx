@@ -5,6 +5,7 @@ import CalendarView from "./CalendarView";
 import Profile from "./Profile";
 import Settings from "./Settings";
 import Notifications from "./Notifications";
+import Health from "./Health";
 
 import API_URL from "../config";
 
@@ -12,29 +13,35 @@ export default function Layout({ setToken }) {
   const [page, setPage] = useState("calendar");
   const [notifications, setNotifications] = useState([]);
   const [calendarKey, setCalendarKey] = useState(0);
+  const [userName, setUserName] = useState("User");
 
-  // Fetch notifications for sidebar badge
+  // Fetch notifications & user profile
   useEffect(() => {
-    const fetchNotify = async () => {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const [periodsRes, settingsRes] = await Promise.all([
+        const [periodsRes, settingsRes, profileRes] = await Promise.all([
           axios.get(`${API_URL}/api/periods`, { headers: { Authorization: token } }),
-          axios.get(`${API_URL}/api/auth/settings`, { headers: { Authorization: token } })
+          axios.get(`${API_URL}/api/auth/settings`, { headers: { Authorization: token } }),
+          axios.get(`${API_URL}/api/auth/profile`, { headers: { Authorization: token } })
         ]);
 
-        // Simple logic check for immediate upcoming period (same as Notifications component)
+        // Notifications logic
         const dates = periodsRes.data.map(d => d.start_date).sort();
         if (dates.length >= 2) {
-          // We could duplicate logic or just generic count. 
-          // For now let's set a dummy count if prediction exists
           setNotifications([1]);
         }
+
+        // Profile logic
+        if (profileRes.data.display_name) {
+          setUserName(profileRes.data.display_name);
+        }
+
       } catch (e) {
         // quiet fail
       }
     };
-    fetchNotify();
+    fetchData();
   }, [page]);
 
   const openCalendar = () => {
@@ -50,6 +57,7 @@ export default function Layout({ setToken }) {
         setToken={setToken}
         openCalendar={openCalendar}
         notificationCount={notifications.length}
+        userName={userName}
       />
 
       <div className="main">
@@ -59,7 +67,8 @@ export default function Layout({ setToken }) {
         {page === "notifications" && (
           <Notifications />
         )}
-        {page === "profile" && <Profile />}
+        {page === "health" && <Health />}
+        {page === "profile" && <Profile onNameUpdate={setUserName} />}
         {page === "settings" && <Settings />}
       </div>
     </div>

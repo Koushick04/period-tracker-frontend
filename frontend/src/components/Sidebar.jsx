@@ -9,23 +9,11 @@ export default function Sidebar({
   setPage,
   setToken,
   openCalendar,
-  notificationCount
+  notificationCount,
+  userName
 }) {
-  const [userName, setUserName] = useState("User");
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-
-  useEffect(() => {
-    const fetchName = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${API_URL}/api/auth/profile`, {
-          headers: { Authorization: token }
-        });
-        if (res.data.display_name) setUserName(res.data.display_name);
-      } catch (e) { /* ignore */ }
-    };
-    fetchName();
-  }, []); // Run once on mount
+  // Removed internal userName state/fetch to rely on parent prop for instant updates
 
   const handleLogoutClick = () => {
     setShowLogoutConfirm(true);
@@ -62,6 +50,12 @@ export default function Sidebar({
             onClick={() => setPage("profile")}
           >
             <span className="nav-icon">👤</span> Profile
+          </li>
+          <li
+            className={`nav-item ${page === "health" ? "active" : ""}`}
+            onClick={() => setPage("health")}
+          >
+            <span className="nav-icon">❤️</span> Health
           </li>
           <li
             className={`nav-item ${page === "settings" ? "active" : ""}`}

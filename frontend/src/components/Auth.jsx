@@ -204,60 +204,68 @@ const container = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  background: "#fdf2f8",
+  background: "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
+  backgroundSize: "400% 400%",
+  animation: "gradient 15s ease infinite"
 };
 
 const card = {
-  background: "rgba(255, 255, 255, 0.95)", // Glass effect
-  backdropFilter: "blur(10px)",
+  background: "rgba(255, 255, 255, 0.8)", // More transparent matching glassmorphism
+  backdropFilter: "blur(20px)",
   padding: "40px",
   borderRadius: "24px",
-  width: "360px",
-  boxShadow: "0 25px 50px rgba(0,0,0,0.1)",
-  border: "1px solid rgba(255,255,255,0.5)"
+  width: "380px",
+  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+  border: "1px solid rgba(255, 255, 255, 0.18)",
+  position: "relative",
+  zIndex: 2
 };
 
 const title = {
   textAlign: "center",
   marginBottom: "8px",
-  color: "#be185d", // Darker pink
-  fontSize: "28px",
-  fontWeight: "700"
+  color: "#be185d",
+  fontSize: "32px",
+  fontWeight: "800",
+  textShadow: "0px 2px 2px rgba(0,0,0,0.1)"
 };
 
 const input = {
   width: "100%",
-  padding: "14px",
+  padding: "16px",
   marginBottom: "16px",
   borderRadius: "12px",
-  border: "1px solid #e5e7eb",
+  border: "2px solid transparent",
   fontSize: "15px",
   color: "#333",
-  background: "#f9fafb",
-  boxSizing: "border-box" /* Ensure padding doesn't affect width */
+  background: "rgba(255,255,255,0.9)",
+  boxSizing: "border-box",
+  transition: "all 0.3s",
+  boxShadow: "inset 0 2px 4px rgba(0,0,0,0.06)"
 };
 
 const passwordInput = {
   ...input,
-  paddingRight: "40px" // Space for the eye icon
+  paddingRight: "40px"
 };
 
 const button = {
   width: "100%",
-  padding: "14px",
-  background: "linear-gradient(to right, #db2777, #be185d)",
+  padding: "16px",
+  background: "linear-gradient(to right, #ec4899, #be185d)",
   color: "#fff",
   border: "none",
   borderRadius: "12px",
   fontSize: "16px",
-  fontWeight: "600",
+  fontWeight: "700",
   cursor: "pointer",
   marginTop: "10px",
-  transition: "transform 0.1s"
+  transition: "transform 0.2s, box-shadow 0.2s",
+  boxShadow: "0 4px 15px rgba(236, 72, 153, 0.4)"
 };
 
 const switchText = {
-  marginTop: "10px",
+  marginTop: "16px",
   fontSize: "14px",
   color: "#4b5563"
 };
@@ -265,8 +273,9 @@ const switchText = {
 const switchLink = {
   color: "#be185d",
   cursor: "pointer",
-  fontWeight: "600",
-  marginLeft: "5px"
+  fontWeight: "700",
+  marginLeft: "5px",
+  textDecoration: "underline"
 };
 
 const linkText = {
@@ -274,11 +283,11 @@ const linkText = {
   fontSize: "14px",
   cursor: "pointer",
   textDecoration: "underline",
-  marginBottom: "10px"
+  marginBottom: "16px"
 };
 
 const errorStyle = {
-  background: "#fef2f2",
+  background: "rgba(254, 226, 226, 0.9)",
   color: "#991b1b",
   padding: "12px",
   borderRadius: "10px",
@@ -289,7 +298,7 @@ const errorStyle = {
 };
 
 const successStyle = {
-  background: "#ecfdf5",
+  background: "rgba(209, 250, 229, 0.9)",
   color: "#065f46",
   padding: "12px",
   borderRadius: "10px",
@@ -298,3 +307,30 @@ const successStyle = {
   fontSize: "14px",
   border: "1px solid #a7f3d0"
 };
+
+// Add GLOBAL STYLES for animation
+const globalStyles = `
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.auth-bg input:focus {
+  outline: none;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);
+}
+.auth-bg button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.6);
+}
+.fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+`;
+
+document.head.insertAdjacentHTML("beforeend", `<style>${globalStyles}</style>`);
